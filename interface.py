@@ -4,11 +4,14 @@ from contact import Contact
 from AddressBook import AddressBook
 
 class ContactApp:
-    def __init__(self, root):
+    def __init__(self, root,on_logout=None,nom_utilisateur="Invité"):
         self.root = root
         self.root.title("📒 Gestion des contacts")
         self.root.geometry("650x600")
+        self.nom_utilisateur = nom_utilisateur
+        self.on_logout = on_logout
         self.root.resizable(True, True)
+        print(f"ContactApp reçoit nom_utilisateur = {nom_utilisateur}")
 
         # Carnet d'adresses
         self.carnet = AddressBook("Mescontacts.txt")
@@ -31,6 +34,15 @@ class ContactApp:
             bg='lightblue'
         )
         self.label_titre.pack(pady=20)
+        # Label pour le nom d'utilisateur (avec couleur et police différentes)
+        self.label_nom_utilisateur = tk.Label(
+            self.frame_top,
+            text=f"👤 {self.nom_utilisateur}",
+            font=('Segoe UI', 14, 'italic'),
+            fg='#2c3e50',      # Couleur du texte (bleu foncé)
+            bg='lightblue'
+        )
+        self.label_nom_utilisateur.pack(pady=(0, 10))
 
         # ==================== FRAME DES DÉTAILS ====================
         self.frame_details = tk.Frame(self.root, bg='lightyellow', height=100, relief='sunken', bd=1)
@@ -118,6 +130,7 @@ class ContactApp:
         )
         self.btn_rafraichir.pack(side='left', padx=5, fill='x', expand=True)
         #Bouton Quitter 
+        """
         self.btn_quitter = tk.Button(
             self.frame_buttons,
             text="🚪 Quitter",
@@ -126,7 +139,16 @@ class ContactApp:
             command=self.fermer_application   # ← appelle une méthode
         )
         self.btn_quitter.pack(side='left', padx=5, fill='x', expand=True)
-
+        """
+         # Au lieu du bouton "Quitter", on met un bouton "Déconnexion"
+        self.btn_deconnexion = tk.Button(
+           self.frame_buttons,
+           text="🔓 Déconnexion",
+           font=('Arial', 11),
+           bg='orange', fg='white',
+           command=self.deconnexion
+        )
+        self.btn_deconnexion.pack(side='left', padx=5, fill='x', expand=True)
     # ==================== MÉTHODES ====================
 
     def ajouter_contact(self):
@@ -225,10 +247,15 @@ class ContactApp:
 
     def on_select_contact(self, event):
         self.afficher_details()
+    """
     def fermer_application(self):
-        """Ferme proprement l'application"""
+        #Ferme proprement l'application
         self.root.destroy()
-
+    """
+    def deconnexion(self):
+        """Ferme la fenêtre principale et retourne à l'écran de connexion"""
+        self.root.destroy()  # Ferme la fenêtre du carnet
+        self.on_logout()     # Rappelle la fonction pour rouvrir la connexion
 
 # ==================== LANCEMENT DE L'APPLICATION ====================
 """
