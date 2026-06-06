@@ -101,26 +101,15 @@ class AddressBook:
             return None
     """
     def desplayContact(self, name):
-        if not os.path.exists(self.fich):
-            print("Fichier non trouvé")
-            return
+        """Retourne le contact correspondant au nom (depuis self.book)"""
+        if not self.book:
+            return None
         name_clean = name.strip().lower()
-        with open(self.fich, 'r', encoding='utf-8') as f:
-            for ligne in f:
-                ligne = ligne.strip()
-                if not ligne:
-                    continue
-                # Découper la ligne : nom;téléphone;email
-            parties = ligne.split(';')
-            if len(parties) == 3:
-                nom_fichier, tel, email = parties
-                if nom_fichier.strip().lower() == name_clean:
-                    print(f" Nom : {nom_fichier}")
-                    print(f" Téléphone : {tel}")
-                    print(f" Email : {email}")
-                    return
+        for contact in self.book:
+            if contact.nom.strip().lower() == name_clean:
+                return contact
+        return None  
     
-                print(f"❌ Contact '{name}' non trouvé.")
     def afficher_fichier(self):
         if os.path.exists(self.fich):
             with open(self.fich, 'r') as fi:
@@ -137,4 +126,3 @@ class AddressBook:
         else:
             print("Fichier non trouvé")
 
-                
