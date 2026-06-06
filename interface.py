@@ -14,7 +14,9 @@ class ContactApp:
         print(f"ContactApp reçoit nom_utilisateur = {nom_utilisateur}")
 
         # Carnet d'adresses
-        self.carnet = AddressBook("Mescontacts.txt")
+        #self.carnet = AddressBook("Mescontacts.txt")
+        #Ajout de DB
+        self.carnet = AddressBook("contacts.db")   # ou laissez vide : AddressBook()
 
         # Création de l'interface
         self.create_widgets()
@@ -234,7 +236,7 @@ class ContactApp:
             return
 
         nom = self.listbox.get(selection[0])
-        contact = self.carnet.desplayContact(nom)
+        contact = self.carnet.displayContact(nom)  
 
         if contact:
             self.label_details.config(
@@ -256,7 +258,9 @@ class ContactApp:
         """Ferme la fenêtre principale et retourne à l'écran de connexion"""
         self.root.destroy()  # Ferme la fenêtre du carnet
         self.on_logout()     # Rappelle la fonction pour rouvrir la connexion
-
+    def __del__(self):
+        if hasattr(self, 'carnet'):
+            self.carnet.close()
 # ==================== LANCEMENT DE L'APPLICATION ====================
 """
 if __name__ == "__main__":
