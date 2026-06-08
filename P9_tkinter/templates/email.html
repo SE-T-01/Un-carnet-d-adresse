@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card" style="max-width: 600px; margin: 0 auto;">
+    <h3>✉️ Rédiger un message pour {{ contact.prenom }} {{ contact.nom }}</h3>
+    <p style="color: #6b7280; font-size: 0.9rem;">Destinataire : <strong>{{ contact.email }}</strong> ({{ contact.categorie }})</p>
+    <form method="POST">
+        <div class="form-group">
+            <label>Sujet du message</label>
+            <input type="text" name="sujet" class="form-control" placeholder="Ex: Confirmation de votre rendez-vous" required>
+        </div>
+        <div class="form-group">
+            <label>Corps du message</label>
+            <textarea name="message" class="form-control" rows="6" placeholder="Bonjour, votre demande a été prise en compte..." required></textarea>
+        </div>
+        <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem;">
+            <button type="submit" class="btn btn-primary" style="flex: 1;">Envoyer le message</button>
+            <a href="/" class="btn" style="background: #e5e7eb; color: #1f2937; text-align: center; flex: 1;">Annuler</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

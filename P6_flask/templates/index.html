@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="flex-header">
+    <h2>Répertoire Téléphonique</h2>
+    <a href="/ajouter" class="btn btn-primary">+++ Nouveau Contact</a>
+</div>
+
+<div class="card">
+    <form method="GET" action="/" class="search-box">
+        <input type="text" name="search" value="{{ search }}" class="form-control" placeholder="Rechercher un contact...">
+        <button type="submit" class="btn btn-primary">Filtrer</button>
+    </form>
+</div>
+
+<div class="card" style="padding: 0; overflow: hidden;">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom & Prénom</th>
+                <th>Téléphone</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contact in contacts %}
+            <tr>
+                <td><strong>{{ contact.nom }}</strong> {{ contact.prenom }}</td>
+                <td>{{ contact.telephone }}</td>
+                <td>{{ contact.email }}</td>
+                <td>
+                    <a href="/modifier/{{ contact.id }}" class="btn btn-warning btn-sm">Modifier</a>
+                    <form action="/supprimer/{{ contact.id }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Supprimer ce contact ?')">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4" style="text-align: center; color: #6b7280; padding: 2rem;">Aucun contact enregistré.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

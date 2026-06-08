@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="flex-header">
+    <h2>Cabinet Médical - Contacts</h2>
+    <a href="/ajouter" class="btn btn-primary">+++ Nouveau Contact</a>
+</div>
+
+<div class="card">
+    <form method="GET" action="/" class="search-box">
+        <input type="text" name="search" value="{{ search }}" class="form-control" placeholder="Filtrer par nom ou catégorie (Patient, Laboratoire...)">
+        <button type="submit" class="btn btn-primary">Filtrer</button>
+    </form>
+</div>
+
+<div class="card" style="padding: 0; overflow: hidden;">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Identité</th>
+                <th>Catégorie</th>
+                <th>Coordonnées</th>
+                <th>Communication directe</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contact in contacts %}
+            <tr>
+                <td>
+                    <strong>{{ contact.nom }} {{ contact.prenom }}</strong>
+                    <div style="font-size: 0.8rem; color: #6b7280;">{{ contact.fonction }} - {{ contact.entreprise }}</div>
+                </td>
+                <td><span class="btn btn-sm" style="background: #e0f2fe; color: #0369a1; cursor: default;">{{ contact.categorie }}</span></td>
+                <td>
+                    <div>📞 {{ contact.telephone }}</div>
+                    <div style="font-size: 0.85rem; color: #4b5563;">✉️ {{ contact.email }}</div>
+                </td>
+                <td>
+                    <!-- Lien WhatsApp officiel plus stable -->
+                    <a href="https://whatsapp.com{{ contact.telephone[1:] }}&text=Bonjour%20{{ contact.prenom }},%20votre%20cabinet%20médical%20vous%20contacte." 
+                    target="_blank" class="btn btn-success btn-sm">💬 WhatsApp</a>
+                    
+                    <a href="/email/{{ contact.id }}" class="btn btn-primary btn-sm">✉️ Email</a>
+                </td>
+                <td>
+                    <a href="/modifier/{{ contact.id }}" class="btn btn-warning btn-sm" style="background: #f59e0b; color: white; text-decoration: none; padding: 0.3rem 0.7rem; border-radius: 6px; margin-right: 5px;">Modifier</a>
+                    
+                    <form action="/supprimer/{{ contact.id }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Supprimer ?')">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5" style="text-align: center; padding: 2rem;">Aucun acteur trouvé.</td></tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+{% endblock %}

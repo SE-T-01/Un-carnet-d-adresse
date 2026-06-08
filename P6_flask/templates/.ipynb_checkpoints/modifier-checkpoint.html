@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifier un Contact</title>
+    <link href="https://jsdelivr.net" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container mt-5" style="max-width: 500px;">
+        <h1 class="mb-4">✏️ Modifier le Contact</h1>
+        <div class="card p-4 shadow-sm">
+            <form method="POST">
+                <div class="mb-3"><label class="form-label">Nom</label><input type="text" name="nom" value="{{ contact.nom }}" class="form-control" required></div>
+                <div class="mb-3"><label class="form-label">Prénom</label><input type="text" name="prenom" value="{{ contact.prenom }}" class="form-control" required></div>
+                <div class="mb-3"><label class="form-label">Téléphone</label><input type="text" name="telephone" value="{{ contact.telephone }}" class="form-control" required></div>
+                <div class="mb-3"><label class="form-label">Email</label><input type="email" name="email" value="{{ contact.email }}" class="form-control" required></div>
+                <button type="submit" class="btn btn-warning w-100">Mettre à jour</button>
+            </form>
+            <a href="/" class="btn btn-link mt-3 text-center">Annuler</a>
+        </div>
+    </div>
+</body>
+</html>

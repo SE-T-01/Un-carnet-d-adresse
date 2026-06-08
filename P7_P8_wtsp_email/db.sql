@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS contacts;
+
+CREATE TABLE contacts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nom TEXT NOT NULL,
+    prenom TEXT NOT NULL,
+    telephone TEXT NOT NULL,
+    email TEXT NOT NULL
+);
