@@ -28,18 +28,17 @@ Technologies utilisées
 | hashlib | Hachage des mots de passe (SHA‑256) |
 | Flask | Application web |
 
-Configuration et installation:        
--Python 3.8 ou supérieur       
+Configuration et installation:      
 - Compte Gmail avec **vérification en deux étapes activée** et **mot de passe d'application** généré
 - Navigateur web (Chrome recommandé)
-##Créer un environnement virtuel  
+Créer un environnement virtuel  
   -Installer Flask : pip install flask     
   -Déplacer dans votre dossier avec invite command :    
   -Créer un environnement : python -m venv Nom_environment    
   -Activer l'environnement :Nom_environment\Scripts\activate    
- ##Installer les dépendances     
+ Installer les dépendances     
   -Installer  La bibliothèque pywhatkit afin d' utiliser  WhatsApp : pip install pywhatkit                          
- ##Configuration de l’envoi d’emails (Gmail):         
+ Configuration de l’envoi d’emails (Gmail):         
  Dans le fichier app.py, remplacez les lignes suivantes :        
         EMAIL_EXPEDITEUR = "votre_email@gmail.com"          
         EMAIL_MOT_DE_PASSE = "votre_mot_de_passe_application"        
@@ -48,7 +47,7 @@ Configuration et installation:
         EMAIL_MOT_DE_PASSE : mot de passe d’application (et non votre mot de passe habituel).       
     Pour générer un mot de passe d’application : https://myaccount.google.com/apppasswords        
 
-##Lancer l’application:     
+Lancer l’application:     
   Exécuter python app.py
 
 
