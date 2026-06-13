@@ -1,9 +1,18 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 import sqlite3
 from email.message import EmailMessage
-import subprocess
-import sys
-
+import smtplib
+ # Biblio de what
+import pywhatkit as kit
+# Désactiver la vérification de connexion
+kit.core.check_connection = lambda: None
+# Configuration SMTP (Gmail)
+SMTP_SERVEUR = "smtp.gmail.com"
+SMTP_PORT = 587
+EMAIL_EXPEDITEUR = "YVotre Email"
+EMAIL_MOT_DE_PASSE = "Votre passe word"
+print("=== DÉBUT DE L'EXÉCUTION ===")
+print("Chargement des bibliothèques...")
 app = Flask(__name__)
 app.secret_key = "cle_secrete_medicale"
 
@@ -119,20 +128,29 @@ def envoyer_email(id):
     if request.method == 'POST':
         sujet = request.form['sujet']
         contenu = request.form['message']
+        
         try:
+            # Création du message
             msg = EmailMessage()
             msg.set_content(contenu)
             msg['Subject'] = sujet
-            msg['From'] = "votre_email@gmail.com"
+            msg['From'] = EMAIL_EXPEDITEUR
             msg['To'] = contact['email']
             
-            flash(f"Message préparé avec succès pour {contact['email']} !", "success")
+            # Connexion au serveur SMTP et envoi
+            with smtplib.SMTP(SMTP_SERVEUR, SMTP_PORT) as smtp:
+                smtp.starttls()
+                smtp.login(EMAIL_EXPEDITEUR, EMAIL_MOT_DE_PASSE)
+                smtp.send_message(msg)
+            
+            flash(f"Email envoyé avec succès à {contact['email']} !", "success")
             return redirect(url_for('index'))
+            
         except Exception as e:
-            flash(f"Erreur lors de la préparation de l'email : {str(e)}", "danger")
+            flash(f"Erreur lors de l'envoi : {str(e)}", "danger")
+            return render_template('email.html', contact=contact)
 
     return render_template('email.html', contact=contact)
-
 # Supprimer un contact
 @app.route('/supprimer/<int:id>', methods=('POST',))
 def supprimer(id):
@@ -143,16 +161,35 @@ def supprimer(id):
     flash('Contact supprimé !', 'success')
     return redirect(url_for('index'))
 
-@app.route('/ouvrir_agenda')
-def ouvrir_agenda():
-    try:
-        # Lance le script de l'agenda Tkinter en arrière-plan
-        subprocess.Popen(["python", "agenda.py"])
-        flash("L'agenda Tkinter a été ouvert avec succès !", "success")
-    except Exception as e:
-        flash(f"Erreur lors de l'ouverture de l'agenda : {str(e)}", "danger")
-        
-    return redirect(url_for('index'))
 
+#Whats'app
+
+@app.route('/whatsapp/<int:id>', methods=('GET', 'POST'))
+def envoyer_whatsapp(id):
+    conn = get_db_connection()
+    contact = conn.execute('SELECT * FROM contacts WHERE id = ?', (id,)).fetchone()
+    conn.close()
+    
+    if request.method == 'POST':
+        message = request.form['message']
+        numero = contact['telephone']
+        
+        # Format du numéro : +212XXXXXXXXX
+        if not numero.startswith('+'):
+            numero = '+212' + numero.lstrip('0')
+        
+        try:
+            # Envoi immédiat (heure actuelle + 2 minutes)
+            kit.sendwhatmsg_instantly(numero, message, wait_time=15)
+            flash(f"Message WhatsApp envoyé à {numero} !", "success")
+        except Exception as e:
+            flash(f"Erreur WhatsApp : {str(e)}", "danger")
+        
+        return redirect(url_for('index'))
+    
+    return render_template('whatsapp.html', contact=contact)
+
+# UN SEUL app.run() à la fin
 if __name__ == '__main__':
-    app.run(debug=True)
+    from waitress import serve
+    serve(app, host='127.0.0.1', port=5000)

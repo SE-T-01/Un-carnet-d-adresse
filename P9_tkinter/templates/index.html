@@ -1,15 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="flex-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+<div class="flex-header">
     <h2>Cabinet Médical - Contacts</h2>
-    <div style="display: flex; gap: 10px;">
-        <!-- Nouveau bouton pour lancer l'agenda Tkinter -->
-        <a href="/ouvrir_agenda" class="btn" style="background: #0fe05c; color: white; text-decoration: none; padding: 0.6rem 1.2rem; border-radius: 6px; font-weight: bold;">
-            📅 Gestion des RDV
-        </a>
-        <a href="/ajouter" class="btn btn-primary" style="text-decoration: none;">+++ Nouveau Contact</a>
-    </div>
+    <a href="/ajouter" class="btn btn-primary">+++ Nouveau Contact</a>
 </div>
 
 <div class="card">
@@ -44,8 +38,8 @@
                 </td>
                 <td>
                     <!-- Lien WhatsApp officiel plus stable -->
-                    <a href="https://whatsapp.com{{ contact.telephone[1:] }}&text=Bonjour%20{{ contact.prenom }},%20votre%20cabinet%20médical%20vous%20contacte." 
-                    target="_blank" class="btn btn-success btn-sm">💬 WhatsApp</a>
+                    <a href="https://web.whatsapp.com/send?phone=212{{ contact.telephone[1:] }}&text=Bonjour%20{{ contact.prenom }},%20votre%20cabinet%20médical%20vous%20contacte." 
+                          target="_blank" class="btn btn-success btn-sm">💬 WhatsApp</a>
                     
                     <a href="/email/{{ contact.id }}" class="btn btn-primary btn-sm">✉️ Email</a>
                 </td>
